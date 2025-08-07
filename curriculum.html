@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Task Management Dashboard</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="shortcut icon" href="./idara logo.png" type="image/x-icon">
+  <style>
+    :root {
+      --primary-dark: #1A144C;
+      /* Dark navy for navbar and text */
+      --primary-accent: #01B7C5;
+      /* Cyan accent color */
+      --neutral-gray: #7A7D7D;
+      --pure-white: #FFFFFF;
+      --light-bg: #F8FAFC;
+      --success: #28A745;
+      --warning: #FFC107;
+    }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: var(--light-bg);
+      margin: 0;
+      padding: 0;
+      color: var(--primary-dark);
+      line-height: 1.6;
+    }
+
+    /* ---------------- NAVBAR ---------------- */
+    .navbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background-color: var(--primary-dark);
+      padding: 12px 30px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+    }
+
+    .navbar img {
+      height: 42px;
+      filter: none;
+      /* Remove inversion filter */
+      background: var(--pure-white);
+      /* White background for contrast */
+      padding: 4px 6px;
+      /* Small space inside */
+      border-radius: 6px;
+      /* Rounded edges */
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+      /* Subtle shadow */
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 25px;
+    }
+
+    .nav-links a {
+      color: var(--pure-white);
+      text-decoration: none;
+      font-size: 16px;
+      font-weight: 500;
+      padding: 8px 16px;
+      border-radius: 6px;
+      transition: all 0.3s ease;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .nav-links a:hover {
+      background: rgba(255, 255, 255, 0.15);
+      transform: translateY(-2px);
+    }
+
+    .nav-links a i {
+      font-size: 14px;
+    }
+
+    /* Hamburger Icon */
+    .menu-toggle {
+      display: none;
+      font-size: 24px;
+      color: white;
+      cursor: pointer;
+      padding: 8px;
+    }
+
+    /* Responsive Nav */
+    @media (max-width: 768px) {
+      .navbar {
+        padding: 12px 20px;
+      }
+
+      .nav-links {
+        display: none;
+        flex-direction: column;
+        width: 100%;
+        background: var(--primary-dark);
+        position: absolute;
+        top: 66px;
+        left: 0;
+        padding: 15px 0;
+        box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
+      }
+
+      .nav-links.show {
+        display: flex;
+      }
+
+      .menu-toggle {
+        display: block;
+      }
+    }
+
+  </style>
+</head>
+
+<body>
+  <!-- NAVBAR -->
+  <nav class="navbar">
+    <img src="./idara logo.png" alt="Logo">
+    <div class="menu-toggle" onclick="toggleMenu()">☰</div>
+    <div class="nav-links" id="navLinks">
+      <a href="./index.html">Task Dashboard</a>
+      <a href="./curriculum.html">STEAM Curriculum</a>
+      <a href="./Inventory.html">Robotics Inventory</a>
+    </div>
+  </nav>
+
+  <h1>In Process.... Coming Soon!</h1>
+  
+</body>
+
+</html>

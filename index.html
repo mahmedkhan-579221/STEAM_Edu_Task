@@ -1,0 +1,618 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Task Management Dashboard</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="shortcut icon" href="./idara logo.png" type="image/x-icon">
+  <style>
+    :root {
+      --primary-dark: #1A144C;
+      /* Dark navy for navbar and text */
+      --primary-accent: #01B7C5;
+      /* Cyan accent color */
+      --neutral-gray: #7A7D7D;
+      --pure-white: #FFFFFF;
+      --light-bg: #F8FAFC;
+      --success: #28A745;
+      --warning: #FFC107;
+    }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: var(--light-bg);
+      margin: 0;
+      padding: 0;
+      color: var(--primary-dark);
+      line-height: 1.6;
+    }
+
+    /* ---------------- NAVBAR ---------------- */
+    .navbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background-color: var(--primary-dark);
+      padding: 12px 30px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+    }
+
+    .navbar img {
+      height: 42px;
+      filter: none;
+      /* Remove inversion filter */
+      background: var(--pure-white);
+      /* White background for contrast */
+      padding: 4px 6px;
+      /* Small space inside */
+      border-radius: 6px;
+      /* Rounded edges */
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+      /* Subtle shadow */
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 25px;
+    }
+
+    .nav-links a {
+      color: var(--pure-white);
+      text-decoration: none;
+      font-size: 16px;
+      font-weight: 500;
+      padding: 8px 16px;
+      border-radius: 6px;
+      transition: all 0.3s ease;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .nav-links a:hover {
+      background: rgba(255, 255, 255, 0.15);
+      transform: translateY(-2px);
+    }
+
+    .nav-links a i {
+      font-size: 14px;
+    }
+
+    /* Hamburger Icon */
+    .menu-toggle {
+      display: none;
+      font-size: 24px;
+      color: white;
+      cursor: pointer;
+      padding: 8px;
+    }
+
+    /* Responsive Nav */
+    @media (max-width: 768px) {
+      .navbar {
+        padding: 12px 20px;
+      }
+
+      .nav-links {
+        display: none;
+        flex-direction: column;
+        width: 100%;
+        background: var(--primary-dark);
+        position: absolute;
+        top: 66px;
+        left: 0;
+        padding: 15px 0;
+        box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
+      }
+
+      .nav-links.show {
+        display: flex;
+      }
+
+      .menu-toggle {
+        display: block;
+      }
+    }
+
+    /* ---------------- PAGE CONTENT ---------------- */
+    .container {
+      padding: 30px;
+      max-width: 1400px;
+      margin: 0 auto;
+    }
+
+    .dashboard-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 30px;
+      flex-wrap: wrap;
+      gap: 20px;
+    }
+
+    h1 {
+      color: var(--primary-dark);
+      margin: 0;
+      font-size: 28px;
+      font-weight: 700;
+    }
+
+    .stats-summary {
+      display: flex;
+      gap: 15px;
+      flex-wrap: wrap;
+    }
+
+    .stat-card {
+      background: var(--pure-white);
+      padding: 15px 25px;
+      border-radius: 10px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+      min-width: 150px;
+      text-align: center;
+      border-left: 4px solid var(--primary-accent);
+    }
+
+    .stat-card h3 {
+      margin: 0;
+      font-size: 14px;
+      color: var(--neutral-gray);
+      font-weight: 600;
+    }
+
+    .stat-card p {
+      margin: 8px 0 0;
+      font-size: 24px;
+      font-weight: 700;
+      color: var(--primary-dark);
+    }
+
+    /* Filter Section */
+    .filter-section {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 25px;
+      flex-wrap: wrap;
+      gap: 15px;
+      background: var(--pure-white);
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    }
+
+    .filter-group {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .filter-group h3 {
+      margin: 0;
+      font-size: 14px;
+      color: var(--neutral-gray);
+      font-weight: 600;
+    }
+
+    button {
+      background: var(--primary-accent);
+      color: var(--pure-white);
+      border: none;
+      padding: 10px 20px;
+      margin: 0;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 14px;
+      font-weight: 600;
+      transition: all 0.3s ease;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      box-shadow: 0 2px 8px rgba(1, 183, 197, 0.3);
+    }
+
+    button:hover {
+      background: #0199a5;
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(1, 183, 197, 0.4);
+    }
+
+    button:active {
+      transform: translateY(0);
+    }
+
+    button i {
+      font-size: 12px;
+    }
+
+    /* Active Button Style */
+    .active {
+      background: var(--success) !important;
+      box-shadow: 0 2px 8px rgba(40, 167, 69, 0.3) !important;
+    }
+
+    .active:hover {
+      background: #239a3d !important;
+      box-shadow: 0 4px 12px rgba(40, 167, 69, 0.4) !important;
+    }
+
+    /* Responsive Button Layout */
+    @media (max-width: 600px) {
+      .filter-group {
+        width: 100%;
+      }
+
+      .filter-group button {
+        flex: 1;
+        justify-content: center;
+      }
+    }
+
+    /* Data Table */
+    .table-container {
+      background: var(--pure-white);
+      border-radius: 10px;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+      overflow: hidden;
+    }
+
+    #data-table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    #data-table th,
+    #data-table td {
+      padding: 16px 20px;
+      text-align: left;
+    }
+
+    #data-table th {
+      background-color: var(--primary-dark);
+      color: var(--pure-white);
+      font-weight: 600;
+      text-transform: uppercase;
+      font-size: 13px;
+      letter-spacing: 0.5px;
+      position: sticky;
+      top: 0;
+    }
+
+    #data-table tr:nth-child(even) {
+      background-color: rgba(1, 183, 197, 0.05);
+    }
+
+    #data-table tr:hover {
+      background-color: rgba(1, 183, 197, 0.1);
+    }
+
+    #data-table td {
+      border-bottom: 1px solid rgba(122, 125, 125, 0.1);
+      font-size: 14px;
+    }
+
+    .status-badge {
+      display: inline-block;
+      padding: 4px 10px;
+      border-radius: 12px;
+      font-size: 12px;
+      font-weight: 600;
+      text-transform: capitalize;
+    }
+
+    .status-pending {
+      background-color: rgba(255, 193, 7, 0.15);
+      color: #d39e00;
+    }
+
+    .status-completed {
+      background-color: rgba(40, 167, 69, 0.15);
+      color: var(--success);
+    }
+
+    /* Table scroll on mobile */
+    @media (max-width: 768px) {
+      .table-container {
+        overflow-x: auto;
+        border-radius: 8px;
+      }
+
+      #data-table {
+        min-width: 700px;
+      }
+    }
+
+    /* Loading State */
+    #loading {
+      text-align: center;
+      padding: 40px;
+      font-size: 16px;
+      color: var(--neutral-gray);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 15px;
+    }
+
+    .loading-spinner {
+      border: 4px solid rgba(1, 183, 197, 0.2);
+      border-top: 4px solid var(--primary-accent);
+      border-radius: 50%;
+      width: 40px;
+      height: 40px;
+      animation: spin 1s linear infinite;
+    }
+
+    @keyframes spin {
+      0% {
+        transform: rotate(0deg);
+      }
+
+      100% {
+        transform: rotate(360deg);
+      }
+    }
+
+    /* Empty State */
+    .empty-state {
+      text-align: center;
+      padding: 50px 20px;
+      color: var(--neutral-gray);
+    }
+
+    .empty-state i {
+      font-size: 48px;
+      margin-bottom: 15px;
+      color: rgba(122, 125, 125, 0.3);
+    }
+
+    .empty-state h3 {
+      margin: 0 0 10px;
+      font-weight: 600;
+    }
+
+    .empty-state p {
+      margin: 0;
+    }
+  </style>
+</head>
+
+<body>
+  <!-- NAVBAR -->
+  <nav class="navbar">
+    <img src="./idara logo.png" alt="Logo">
+    <div class="menu-toggle" onclick="toggleMenu()">☰</div>
+    <div class="nav-links" id="navLinks">
+      <a href="./index.html">Task Dashboard</a>
+      <a href="./curriculum.html">STEAM Curriculum</a>
+      <a href="./Inventory.html">Robotics Inventory</a>
+    </div>
+  </nav>
+
+  <!-- PAGE CONTENT -->
+  <div class="container">
+    <div class="dashboard-header">
+      <h1>STEAM Education Tasks</h1>
+      <div class="stats-summary">
+        <div class="stat-card">
+          <h3>Total Tasks</h3>
+          <p id="total-tasks">-</p>
+        </div>
+        <div class="stat-card">
+          <h3>Completed</h3>
+          <p id="completed-tasks">-</p>
+        </div>
+        <div class="stat-card">
+          <h3>Pending</h3>
+          <p id="pending-tasks">-</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="filter-section">
+      <div class="filter-group">
+        <button onclick="setStatusFilter('all', this)" class="active">
+          <i class="fas fa-list"></i> All Tasks
+        </button>
+        <button onclick="setStatusFilter('pending', this)">
+          <i class="fas fa-clock"></i> Pending
+        </button>
+        <button onclick="setStatusFilter('completed', this)">
+          <i class="fas fa-check-circle"></i> Completed
+        </button>
+      </div>
+      <div class="filter-group" id="names-list">
+        <button onclick="setNameFilter(null, this)" class="active">
+          <i class="fas fa-users"></i> All Names
+        </button>
+      </div>
+    </div>
+
+    <div class="table-container">
+      <div id="loading">
+        <div class="loading-spinner"></div>
+        <div>Loading task data...</div>
+      </div>
+      <table id="data-table"></table>
+    </div>
+  </div>
+
+  <script>
+    // Toggle mobile menu
+    function toggleMenu() {
+      document.getElementById("navLinks").classList.toggle("show");
+    }
+
+    const API_KEY = "AIzaSyAiEhYfZwzhH2aq9D0rS-OPFsWONiJdFho";  // Replace with your API key
+    const SHEET_ID = "1XTWdppUvsTimaIRVkLCgTXsPuESPUvSE7tYq_MdaKw8";
+    const RANGE = "Sheet1";
+
+    let headers = [];
+    let rows = [];
+    let allNames = [];
+
+    let selectedName = null;
+    let statusFilter = "all";
+
+    const url = `https://sheets.googleapis.com/v4/spreadsheets/${SHEET_ID}/values/${RANGE}?key=${API_KEY}`;
+
+    fetch(url)
+      .then(response => response.json())
+      .then(data => {
+        document.getElementById('loading').style.display = 'none';
+
+        if (!data.values || data.values.length < 2) {
+          showEmptyState();
+          return;
+        }
+
+        headers = data.values[0];
+        rows = data.values.slice(1);
+
+        // Update stats
+        updateStats(rows);
+
+        // Get unique names
+        allNames = [...new Set(rows.map(row => row[0]))];
+        const namesList = document.getElementById('names-list');
+
+        // Create name buttons
+        allNames.forEach(name => {
+          const btn = document.createElement('button');
+          btn.innerHTML = `<i class="fas fa-user"></i> ${name}`;
+          btn.addEventListener('click', function () {
+            selectedName = name;
+            setActiveButton(namesList, this);
+            applyFilters();
+          });
+          namesList.appendChild(btn);
+        });
+
+        applyFilters();
+      })
+      .catch(error => {
+        document.getElementById('loading').innerHTML = `
+          <i class="fas fa-exclamation-triangle" style="font-size: 24px; color: #dc3545;"></i>
+          <div>Error loading data. Please try again later.</div>
+        `;
+        console.error("Error fetching data:", error);
+      });
+
+    function renderTable(headers, rowsToDisplay) {
+      const table = document.getElementById('data-table');
+
+      if (rowsToDisplay.length === 0) {
+        showEmptyState();
+        return;
+      }
+
+      let tableHTML = "";
+      const statusIndex = headers.findIndex(h => h.toLowerCase() === "status");
+
+      tableHTML += "<thead><tr>";
+      headers.forEach(header => {
+        tableHTML += `<th>${header}</th>`;
+      });
+      tableHTML += "</tr></thead><tbody>";
+
+      rowsToDisplay.forEach(row => {
+        tableHTML += "<tr>";
+        headers.forEach((header, index) => {
+          // Special formatting for status column
+          if (index === statusIndex) {
+            const status = (row[index] || "").toLowerCase();
+            const statusClass = status === "completed" ? "status-completed" : "status-pending";
+            tableHTML += `<td><span class="status-badge ${statusClass}">${status}</span></td>`;
+          } else {
+            tableHTML += `<td>${row[index] || ""}</td>`;
+          }
+        });
+        tableHTML += "</tr>";
+      });
+
+      tableHTML += "</tbody>";
+      table.innerHTML = tableHTML;
+    }
+
+    function applyFilters() {
+      let filteredRows = rows;
+
+      if (selectedName) {
+        filteredRows = filteredRows.filter(row => row[0] === selectedName);
+      }
+
+      const statusIndex = headers.findIndex(h => h.toLowerCase() === "status");
+
+      if (statusFilter !== "all" && statusIndex !== -1) {
+        filteredRows = filteredRows.filter(row =>
+          (row[statusIndex] || "").toLowerCase() === statusFilter
+        );
+      }
+
+      renderTable(headers, filteredRows);
+      updateStats(filteredRows);
+    }
+
+    function setStatusFilter(filter, button) {
+      statusFilter = filter;
+      setActiveButton(button.parentElement, button);
+      applyFilters();
+    }
+
+    function setNameFilter(name, button) {
+      selectedName = name;
+      setActiveButton(button.parentElement, button);
+      applyFilters();
+    }
+
+    function updateStats(rows) {
+      document.getElementById('total-tasks').textContent = rows.length;
+
+      const statusIndex = headers.findIndex(h => h.toLowerCase() === "status");
+      if (statusIndex !== -1) {
+        const completed = rows.filter(row => (row[statusIndex] || "").toLowerCase() === "completed").length;
+        const pending = rows.length - completed;
+
+        document.getElementById('completed-tasks').textContent = completed;
+        document.getElementById('pending-tasks').textContent = pending;
+      }
+    }
+
+    function showEmptyState() {
+      const tableContainer = document.querySelector('.table-container');
+      tableContainer.innerHTML = `
+        <div class="empty-state">
+          <i class="fas fa-clipboard-list"></i>
+          <h3>No tasks found</h3>
+          <p>Try adjusting your filters or check your data source</p>
+        </div>
+      `;
+    }
+
+    // Utility to highlight the active button in a group
+    function setActiveButton(container, activeBtn) {
+      const buttons = container.querySelectorAll('button');
+      buttons.forEach(btn => btn.classList.remove('active'));
+      activeBtn.classList.add('active');
+    }
+
+
+    //hide the inspact button
+    document.addEventListener('contextmenu', event => event.preventDefault());
+    document.onkeydown = function (e) {
+      if (e.keyCode == 123 || // F12
+        (e.ctrlKey && e.shiftKey && (e.keyCode == 'I'.charCodeAt(0) || e.keyCode == 'J'.charCodeAt(0))) ||
+        (e.ctrlKey && e.keyCode == 'U'.charCodeAt(0))) {
+        return false;
+      }
+    }
+  </script>
+</body>
+
+</html>
